@@ -225,7 +225,7 @@ module Facebooker
 
   class StreamGet < Parser#:nodoc:
     def self.process(data)
-      element('stream_get_response', data).content.strip
+      hashinate(element('stream_get_response', data))
     end
   end
 
