@@ -216,12 +216,18 @@ module Facebooker
       element('stream_publish_response', data).content.strip
     end
   end
-  
+
   class StreamAddComment < Parser#:nodoc:
     def self.process(data)
       element('stream_addComment_response', data).content.strip
     end
-  end  
+  end
+
+  class StreamGet < Parser#:nodoc:
+    def self.process(data)
+      element('stream_get_response', data).content.strip
+    end
+  end
 
   class RegisterTemplateBundle < Parser#:nodoc:
     def self.process(data)
@@ -288,7 +294,7 @@ module Facebooker
       element('admin_getAllocation_response', data).content.strip
     end
   end
-  
+
   class GetPublicInfo < Parser#:nodoc:
     def self.process(data)
       hashinate(element('application_getPublicInfo_response', data))
@@ -471,19 +477,19 @@ module Facebooker
       array_of_hashes(element('data_getCookie_response', data), 'cookies')
     end
   end
-  
+
   class EventsRsvp < Parser#:nodoc:
      def self.process(data)
        element('events_rsvp_response', data).content.strip
      end
    end
-   
+
   class EventsCreate < Parser#:nodoc:
     def self.process(data)
       element('events_create_response', data).content.strip
     end
   end
-  
+
   class EventsCancel < Parser#:nodoc:
     def self.process(data)
       element('events_cancel_response', data).content.strip
@@ -705,6 +711,7 @@ module Facebooker
       'facebook.photos.upload' => UploadPhoto,
       'facebook.stream.publish' => StreamPublish,
       'facebook.stream.addComment' => StreamAddComment,
+      'facebook.stream.get' => StreamGet,
       'facebook.events.create' => EventsCreate,
       'facebook.events.cancel' => EventsCancel,
       'facebook.events.get' => EventsGet,
