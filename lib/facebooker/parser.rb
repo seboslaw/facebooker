@@ -496,6 +496,12 @@ module Facebooker
     end
   end
 
+  class EventsInvite < Parser#:nodoc:
+    def self.process(data)
+      element('events_invite_response', data).content.strip
+    end
+  end
+
   class GroupGetMembers < Parser#:nodoc:
     def self.process(data)
       root = element('groups_getMembers_response', data)
@@ -703,6 +709,7 @@ module Facebooker
       'facebook.events.cancel' => EventsCancel,
       'facebook.events.get' => EventsGet,
       'facebook.events.rsvp' => EventsRsvp,
+      'facebook.events.invite' => EventsInvite,
       'facebook.groups.get' => GroupsGet,
       'facebook.events.getMembers' => EventMembersGet,
       'facebook.groups.getMembers' => GroupGetMembers,

@@ -328,6 +328,20 @@ module Facebooker
       result == '1' ? true : false
     end
 
+    # Invite contact to an event
+    # http://wiki.developers.facebook.com/index.php/Events.invite
+    # E.g:
+    #  @session.invite_to_event('100321123', [user_id_1, user_id_2, user_id_3, ...])
+    #  # => Returns true if all went well
+    def invite_to_event(eid, user_ids)
+      user_ids = Array(user_ids)
+      params = {:eid => eid, :uids => user_ids.map{ |id| id}.join(',')} 
+      result = post 'facebook.events.invite', params, false
+      
+      # result = post('facebook.events.invite', options.merge(:eid => eid))
+      result == '1' ? true : false
+    end
+
     def event_members(eid)
       @members ||= {}
       @members[eid] ||= post('facebook.events.getMembers', :eid => eid) do |response|
@@ -673,6 +687,7 @@ module Facebooker
       def add_facebook_params(hash, method)
         hash[:method] = method
         hash[:api_key] = @api_key
+        hash[:session_key] = @session_key
         hash[:call_id] = Time.now.to_f.to_s unless method == 'facebook.auth.getSession'
         hash[:v] = "1.0"
       end
