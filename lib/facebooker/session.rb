@@ -444,6 +444,14 @@ module Facebooker
       end
     end
 
+    def get_comments(xid)
+      @comments = post("facebook.comments.get", :xid => xid) do |response|
+        response.map do |hash|
+          Comment.from_hash(hash)
+        end
+      end
+    end
+
     def get_tags(pids)
       @tags = post('facebook.photos.getTags', :pids => pids)  do |response|
         response.map do |hash|

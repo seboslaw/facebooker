@@ -225,7 +225,8 @@ module Facebooker
 
   class StreamGet < Parser#:nodoc:
     def self.process(data)
-      element('stream_get_response', data).content.strip
+      hashinate(element('stream_get_response', data))
+      # element('stream_get_response', data).content.strip
     end
   end
 
@@ -292,6 +293,12 @@ module Facebooker
   class GetAllocation < Parser#:nodoc:
     def self.process(data)
       element('admin_getAllocation_response', data).content.strip
+    end
+  end
+
+  class GetComments < Parser#:nodoc:
+    def self.process(data)
+      array_of_hashes(element('comments_get_response',data), 'comment')
     end
   end
 
@@ -659,6 +666,7 @@ module Facebooker
       'facebook.auth.revokeAuthorization' => RevokeAuthorization,
       'facebook.auth.createToken' => CreateToken,
       'facebook.auth.getSession' => GetSession,
+      'facebook.comments.get' => GetComments,
       'facebook.connect.registerUsers' => RegisterUsers,
       'facebook.connect.unregisterUsers' => UnregisterUsers,
       'facebook.connect.getUnconnectedFriendsCount' => GetUnconnectedFriendsCount,
