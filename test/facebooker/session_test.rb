@@ -174,6 +174,15 @@ class Facebooker::SessionTest < Test::Unit::TestCase
     assert_equal 5, event_attendances.size
   end
   
+  def test_can_query_for_comments
+    expect_http_posts_with_responses(example_query_comments_xml)
+    comments = @session.get_comments("pete_comments")
+    assert_kind_of(Facebooker::Comment, comments.first)
+    assert_equal(["65020", "65021"], comments.map{|ea| ea.id}.sort)
+    assert_equal('Hola', comments.first.text)
+    assert_equal 2, comments.size
+  end
+  
   def test_query_for_event_members_caching_honors_params
     @session.expects(:post).returns(["1"])
     assert_equal ["1"], @session.event_members(100)
@@ -630,6 +639,28 @@ XML
         <modified_major>1241834423</modified_major>
       </album>
     </fql_query_response>
+    XML
+  end
+  
+  def example_query_comments_xml
+    <<-XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <comments_get_response xmlns="http://api.facebook.com/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.facebook.com/1.0/ http://api.facebook.com/1.0/facebook.xsd" list="true">
+      <comment>
+        <xid>pete_comments</xid>
+        <fromid>563683308</fromid>
+        <time>1234227529</time>
+        <text>Hola</text>
+        <id>65020</id>
+      </comment>
+      <comment>
+        <xid>pete_comments</xid>
+        <fromid>563683308</fromid>
+        <time>1234227542</time>
+        <text>holla</text>
+        <id>65021</id>
+      </comment>
+    </comments_get_response>
     XML
   end
   
